@@ -6,7 +6,9 @@ node("linux"){
         prod_run=false
     }
     stage("Install roles"){
-        sh 'ansible-galaxy install -r requirements.yml -p roles'
+        sshagent(['git_nikolay']) {
+            sh 'ansible-galaxy install -r requirements.yml -p roles'
+        }        
     }
     stage("Run playbook"){
         if (params.prod_run){
