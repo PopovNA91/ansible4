@@ -8,15 +8,12 @@ node("linux"){
     stage("Install roles"){
         sshagent(['git_nikolay']) {
             sh 'ansible-galaxy install -r requirements.yml -p roles'
+            if (params.prod_run){
+                sh 'ansible-playbook site.yml -i inventory/prod.yml --check --diff'
+            }
+            else{
+                sh 'ansible-playbook site.yml -i inventory/prod.yml'
+            }
         }        
-    }
-    stage("Run playbook"){
-        if (params.prod_run){
-            sh 'ansible-playbook site.yml -i inventory/prod.yml --check --diff'
-        }
-        else{
-            sh 'ansible-playbook site.yml -i inventory/prod.yml'
-        }
-        
     }
 }
