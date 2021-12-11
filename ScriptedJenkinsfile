@@ -5,6 +5,9 @@ node("linux"){
     stage("Sample define secret_check"){
         prod_run=false
     }
+    stage("Install roles"){
+        sh 'ansible-galaxy install -r requirements.yml -p roles'
+    }
     stage("Run playbook"){
         if (params.prod_run){
             sh 'ansible-playbook site.yml -i inventory/prod.yml --check --diff'
